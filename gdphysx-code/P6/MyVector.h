@@ -9,31 +9,21 @@ namespace P6 {
 	{
 		public:
 			float x, y, z;
-
+			
 			MyVector() : x(0), y(0), z(0) {}
 			MyVector(const float _x, const float _y, const float _z) : x(_x), y(_y), z(_z) {}
 
-			explicit operator glm::vec3() const { return glm::vec3(x, y, z); }
+			explicit operator glm::vec3() const { return glm::vec3(x, y, z); }  //for typecast
 
-			MyVector operator+ (const MyVector v) {
-				return MyVector(this->x + v.x, 
-								this->y + v.y,
-								this->z + v.z);
-			}
+			float getMagnitude();
+			MyVector getDirection();
+			void operator+= (const MyVector v);
+			void operator-= (const MyVector v);
+			void scalarMultiplication(const float v);
+			void operator*=(const MyVector v);
+			float scalarProduct(const MyVector v);
+			MyVector getCrossProduct(const MyVector v);
 
-			void operator+= (const MyVector v) {
-				this->x += v.x;
-				this->y += v.y;
-				this->z += v.z;
-			}
-
-			MyVector Add(MyVector b) {
-				return MyVector(
-					this->x + b.x,
-					this->y + b.y,
-					this->z + b.z
-				);
-			}
 	};
 }
 
