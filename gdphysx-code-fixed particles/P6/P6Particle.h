@@ -11,13 +11,18 @@ namespace P6 {
 			MyVector Position;
 			MyVector Velocity;
 			MyVector Acceleration;
+		protected:
+		bool isDestroyed = false;
 
 		protected:
 			void UpdatePosition(float time);
 			void UpdateVelocity(float time);
+			
 
 		public:
 			void Update(float time);
+			void Destroy();
+			bool IsDestroyed();
 	};
 }
 

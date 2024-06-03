@@ -148,6 +148,8 @@
     <ClCompile Include="Class\Camera\OrthoCamera.cpp" />
     <ClCompile Include="P6\P6Particle.cpp" />
     <ClCompile Include="P6\MyVector.cpp" />
+    <ClCompile Include="P6\PhysicsWorld.cpp" />
+    <ClCompile Include="P6\RenderParticle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Shaders\shader.frag">
@@ -173,6 +175,8 @@
     <ClInclude Include="Class\Camera\OrthoCamera.h" />
     <ClInclude Include="P6\P6Particle.h" />
     <ClInclude Include="P6\MyVector.h" />
+    <ClInclude Include="P6\PhysicsWorld.h" />
+    <ClInclude Include="P6\RenderParticle.h" />
     <ClInclude Include="tiny_obj_loader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
