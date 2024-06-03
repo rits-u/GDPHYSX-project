@@ -5,8 +5,8 @@ OrthoCamera::OrthoCamera() {
 	this->rightMost = 1.0f;
 	this->topMost = 1.0f;
 	this->bottomMost = -1.0f;
-	this->z_near = -400.0f;
-	this->z_far = 400.0f;
+	this->z_near = -1.0f;
+	this->z_far = 1.0f;
 }
 
 

@@ -17,9 +17,14 @@ namespace P6 {
 
 			float getMagnitude();
 			MyVector getDirection();
+			MyVector operator+ (const MyVector v);
 			void operator+= (const MyVector v);
+			MyVector operator- (const MyVector v);
 			void operator-= (const MyVector v);
-			void scalarMultiplication(const float v);
+
+			MyVector operator* (const float f);
+			void scalarMultiplication(const float f);
+			MyVector operator* (const MyVector v);
 			void operator*=(const MyVector v);
 			float scalarProduct(const MyVector v);
 			MyVector getCrossProduct(const MyVector v);

@@ -14,6 +14,12 @@ MyVector MyVector::getDirection() {
 }
 
 //ADDITION
+MyVector MyVector::operator+ (const MyVector v) {
+	return MyVector(this->x + v.x,
+					this->y + v.y,
+					this->z + v.z);
+}
+
 void MyVector::operator+= (const MyVector v) {
 	this->x += v.x;
 	this->y += v.y;
@@ -21,6 +27,12 @@ void MyVector::operator+= (const MyVector v) {
 }
 
 //SUBTRACTION
+MyVector MyVector::operator- (const MyVector v) {
+	return MyVector(this->x - v.x,
+					this->y - v.y,
+					this->z - v.z);
+}
+
 void MyVector::operator-= (const MyVector v) {
 	this->x -= v.x;
 	this->y -= v.y;
@@ -28,13 +40,25 @@ void MyVector::operator-= (const MyVector v) {
 }
 
 //SCALAR MULTIPLICATION
-void MyVector::scalarMultiplication (const float v) {
-	this->x *= v;
-	this->y *= v;
-	this->z *= v;
+MyVector MyVector::operator* (const float f) {
+	return MyVector(this->x - f,
+					this->y - f,
+					this->z - f);
+}
+
+void MyVector::scalarMultiplication (const float f) {
+	this->x *= f;
+	this->y *= f;
+	this->z *= f;
 }
 
 //COMPONENT PRODUCT
+MyVector MyVector::operator* (const MyVector v) {
+	return MyVector(this->x * v.x,
+					this->y * v.y,
+					this->z * v.z);
+}
+
 void MyVector::operator*= (const MyVector v) {
 	this->x *= v.x;
 	this->y *= v.y;

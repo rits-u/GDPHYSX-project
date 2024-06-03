@@ -146,6 +146,7 @@
     <ClCompile Include="Class\Camera\MyCamera.cpp" />
     <ClCompile Include="Class\Camera\PerspectiveCamera.cpp" />
     <ClCompile Include="Class\Camera\OrthoCamera.cpp" />
+    <ClCompile Include="P6\P6Particle.cpp" />
     <ClCompile Include="P6\MyVector.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +171,7 @@
     <ClInclude Include="Class\Camera\MyCamera.h" />
     <ClInclude Include="Class\Camera\PerspectiveCamera.h" />
     <ClInclude Include="Class\Camera\OrthoCamera.h" />
+    <ClInclude Include="P6\P6Particle.h" />
     <ClInclude Include="P6\MyVector.h" />
     <ClInclude Include="tiny_obj_loader.h" />
   </ItemGroup>
