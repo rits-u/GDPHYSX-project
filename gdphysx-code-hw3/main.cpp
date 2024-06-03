@@ -34,6 +34,9 @@ constexpr std::chrono::nanoseconds timestep(64ms);
 int SCREEN_WIDTH = 600;
 int SCREEN_HEIGHT = 600;
 
+float x = 0, y = 0, z = 0, timer = 0;
+bool bInput = false;
+
 PerspectiveCamera* persCamera = new PerspectiveCamera();
 OrthoCamera* orthoCamera = new OrthoCamera();
 Model3D* sphere = new Model3D();
@@ -48,7 +51,7 @@ int main(void)
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Andrea Maxene Legaspi", NULL, NULL);
+    window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Andrea Legaspi / Jan Vingno", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -69,34 +72,29 @@ int main(void)
     //--------SPHERE MODEL--------
     tinyobj::attrib_t attributes;
     std::vector<GLuint> mesh_indices = sphere->loadModel("3D/sphere.obj", &attributes);
-    
+
     //bind buffers
     GLuint VAO, VBO;
     sphere->bindBuffers(attributes, mesh_indices, &VAO, &VBO);
     std::cout << "sphere model loaded" << std::endl;
 
-    //P6::MyVector sample(0, 0, 0);
-    //P6::MyVector toAdd(-100, 0, 0);
-    //P6::MyVector toSubtract(300, 0, 0);
-    //P6::MyVector toMultiply(4, 2, 2);
 
-    //VARIABLES
-    //this is 100 m/s to the right-
+     //VARIABLES
+    std::cout << "VELOCITY" << std::endl << "X: ";
+    std::cin >> x;
+
+    std::cout << "Y: ";
+    std::cin >> y;
+
+    std::cout << "Z: ";
+    std::cin >> z;
+
+
     P6::P6Particle particle = P6::P6Particle();
-   // P6::P6Particle particle;
-    particle.Velocity = P6::MyVector(10, 0, 0);
-    particle.Acceleration = P6::MyVector(-30, 0, 0);
+    particle.Position = P6::MyVector(0, -700, 0);
+    particle.Velocity = P6::MyVector(x, y, z);
+    particle.Acceleration = P6::MyVector(0, -50, 0);
 
-
-    //P6::MyVector sample = P6::MyVector();
-    
-
-    //sample.x = 5;
-    //sample += toAdd;
-
-    //sample = sample + toAdd;
-   // sample -= toSubtract;
-   // sample *= toMultiply;
 
     //initialize the clock and variables
     using clock = std::chrono::high_resolution_clock;
@@ -104,53 +102,60 @@ int main(void)
     auto prev_time = curr_time;
     std::chrono::nanoseconds curr_ns(0);
 
+    bool bShowTime = false;
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+        //auto startTime = clock::now();
+
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
 
-        //FIXED UPDATE
+         //FIXED UPDATE
         curr_time = clock::now();       //gets current time
         //check the duration in between the last iteration
         auto dur = std::chrono::duration_cast<std::chrono::nanoseconds> (curr_time - prev_time);
-        
+
+
+        timer += (float)dur.count() / 1000;
+
         prev_time = curr_time;      //set the prev with the current for the next iteration 
 
         curr_ns += dur; //add the duration since last iteration to the time since our last "frame"
 
-        if (curr_ns >= timestep){
+        if (curr_ns >= timestep) {
             //convert ns to ms  
             auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(curr_ns);
             std::cout << "MS: " << (float)ms.count() << "\n";
 
             //reset
             curr_ns -= curr_ns;
-            std::cout << "P6 update" << std::endl;
+           // std::cout << "P6 update" << std::endl;
+            std::cout << particle.Position.y << std::endl;
+            
 
             particle.Update((float)ms.count() / 1000);
         }
-  
-        std::cout << "Normal Update" << std::endl;
+
+        std::cout << particle.Position.y << std::endl;
 
         glm::mat4 viewMatrix = glm::mat4(1.0f);
         glm::mat4 projection = glm::mat4(1.0f);
 
 
         //--------ORTHO CAMERA-------
-        orthoCamera->setPosition(-1000.0f, 1000.0f, 1000.0f, -1000.0f);
-        //orthoCamera->setPosition(-1.0f, 1.0f, 1.0f, -1.0f);
+        orthoCamera->setPosition(1000.0f, -1000.0f, -1000.0f, 1000.0f);
+        orthoCamera->set_zFar(1.0f);
+        orthoCamera->set_zNear(-1.0f);
         viewMatrix = orthoCamera->giveView();
         projection = orthoCamera->giveProjection();
-        
+
         //--------DRAW MODEL--------
         glUseProgram(shaderProg);
-        
-       // sphere->setPosition(sample.x, sample.y, sample.z);
+
         sphere->setPosition(particle.Position.x, particle.Position.y, particle.Position.z);
-       // sphere->setPosition((glm::vec3)sample); typecast version
         sphere->setScale(100, 100, 100);
         sphere->bindCamera(shaderProg, projection, viewMatrix);
         sphere->drawModel(mesh_indices, shaderProg, &VAO);
@@ -160,7 +165,20 @@ int main(void)
 
         /* Poll for and process events */
         glfwPollEvents();
+
+        if (particle.Position.y < -800.0f)
+            break;
+
+        //print timer here
+        if (particle.Position.y < -700 && !bShowTime)
+        {
+            std::cout << "It took " << timer << " seconds for it to land" << std::endl;
+            bShowTime = true;
+        }
+
     }
+
+
 
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
