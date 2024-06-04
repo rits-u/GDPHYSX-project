@@ -13,6 +13,7 @@
 #include "P6/MyVector.h"
 #include "P6/P6Particle.h"
 #include "P6/PhysicsWorld.h"
+#include "P6/RenderParticle.h"
 //using namespace P6;
 
 //openGL
@@ -37,8 +38,7 @@ int SCREEN_HEIGHT = 600;
 
 PerspectiveCamera* persCamera = new PerspectiveCamera();
 OrthoCamera* orthoCamera = new OrthoCamera();
-Model3D* sphere1 = new Model3D();
-Model3D* sphere2 = new Model3D();
+
 
 
 int main(void)
@@ -49,7 +49,7 @@ int main(void)
     if (!glfwInit())
         return -1;
 
-    /* Create a windowed mode window and its OpenGL context */
+    /* Create a windowed mode window and its O      penGL context */
     window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "hello", NULL, NULL);
     if (!window)
     {
@@ -61,29 +61,7 @@ int main(void)
     glfwMakeContextCurrent(window);
     gladLoadGL();
 
-    //--------CREATE SHADER--------
-    Shader* shader = new Shader();
-    GLuint shaderProg = shader->createShader("Shaders/shader.vert", "Shaders/shader.frag");
-    glLinkProgram(shaderProg);
-    shader->deleteShader();
-
-
-    //--------SPHERE MODEL--------
-    tinyobj::attrib_t attributes;
-    std::vector<GLuint> mesh_indices1 = sphere1->loadModel("3D/sphere.obj", &attributes);
-    std::vector<GLuint> mesh_indices2 = sphere2->loadModel("3D/sphere.obj", &attributes);
-    
-    //bind buffers
-    GLuint VAO, VBO;
-    sphere1->bindBuffers(attributes, mesh_indices1, &VAO, &VBO);
-    sphere2->bindBuffers(attributes, mesh_indices2, &VAO, &VBO);
-    std::cout << "sphere model loaded" << std::endl;
-
-    //VARIABLES
-    //this is 100 m/s to the right-
- //   P6::P6Particle particle = P6::P6Particle();
-  //  particle.Velocity = P6::MyVector(10, 0, 0);
-   // particle.Acceleration = P6::MyVector(-30, 0, 0);
+    std::vector<Model3D*> models;
 
     P6::PhysicsWorld pWorld = P6::PhysicsWorld();
     P6::P6Particle p1 = P6::P6Particle();
@@ -97,6 +75,39 @@ int main(void)
     p2.Velocity = P6::MyVector(-10, 0, 0);
     p2.Acceleration = P6::MyVector(-30, 0, 0);
     pWorld.AddParticle(&p2);
+
+
+    Model3D* sphere1 = new Model3D(p1.Position,
+                                   glm::vec3(100, 100, 100), 
+                                   glm::vec4(126.0f / 254.0f, 194.0f / 254.0f, 254.0f / 254.0f, 1.0f));
+    models.push_back(sphere1);
+
+    Model3D* sphere2 = new Model3D(p2.Position,
+                                   glm::vec3(100, 100, 100),
+                                   glm::vec4(26.0f / 254.0f, 94.0f / 254.0f, 254.0f / 254.0f, 1.0f));
+    models.push_back(sphere2);
+
+
+    //--------CREATE SHADER--------
+    Shader* shader = new Shader();
+    GLuint shaderProg = shader->createShader("Shaders/shader.vert", "Shaders/shader.frag");
+    glLinkProgram(shaderProg);
+    shader->deleteShader();
+
+
+    //--------SPHERE MODEL--------
+    tinyobj::attrib_t attributes;
+    std::vector<GLuint> mesh_indices = sphere1->loadModel("3D/sphere.obj", &attributes);
+   // std::vector<GLuint> mesh_indices2 = sphere2->loadModel("3D/sphere.obj", &attributes);
+    
+    //bind buffers
+    GLuint VAO, VBO;
+    sphere1->bindBuffers(attributes, mesh_indices, &VAO, &VBO);
+  //  sphere2->bindBuffers(attributes, mesh_indices2, &VAO, &VBO);
+    std::cout << "sphere model loaded" << std::endl;
+
+
+   
 
 
     //initialize the clock and variables
@@ -154,19 +165,32 @@ int main(void)
         
         //--------DRAW MODEL--------
         glUseProgram(shaderProg);
+
+        sphere1->setPosition(p1.Position);
+        sphere2->setPosition(p2.Position);
         
+        for (int i = 0; i < models.size(); i++) {
+           // models[i]->setPosition(positions[i]);
+            models[i]->bindCamera(shaderProg, projection, viewMatrix);
+            models[i]->drawModel(mesh_indices, shaderProg, &VAO);
+        }
+        
+
+
+
        // sphere->setPosition(sample.x, sample.y, sample.z);
      //   sphere->setPosition(particle.Position.x, particle.Position.y, particle.Position.z);
        // sphere->setPosition((glm::vec3)sample); typecast version
-        sphere1->setPosition(p1.Position.x, p1.Position.y, p1.Position.z);
-        sphere1->setScale(100, 100, 100);
-        sphere1->bindCamera(shaderProg, projection, viewMatrix);
-        sphere1->drawModel(mesh_indices1, shaderProg, &VAO);
+        //  sphere1->setScale(100, 100, 100)
+        //sphere1->setPosition(p1.Position);
+        //sphere1->bindCamera(shaderProg, projection, viewMatrix);
+        //sphere1->drawModel(mesh_indices, shaderProg, &VAO);
 
-        sphere2->setPosition(p2.Position.x, p2.Position.y, p2.Position.z);
-        sphere2->setScale(100, 100, 100);
-        sphere2->bindCamera(shaderProg, projection, viewMatrix);
-        sphere2->drawModel(mesh_indices2, shaderProg, &VAO);
+        ////sphere2->setPosition(p2.Position.x, p2.Position.y, p2.Position.z);
+        ////sphere2->setScale(100, 100, 100);
+        //sphere2->setPosition(p2.Position);
+        //sphere2->bindCamera(shaderProg, projection, viewMatrix);    
+        //sphere2->drawModel(mesh_indices, shaderProg, &VAO);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);

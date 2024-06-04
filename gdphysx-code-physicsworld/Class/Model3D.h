@@ -12,10 +12,20 @@
 
 #include "../tiny_obj_loader.h"
 
+#include "../P6/MyVector.h"
+using namespace P6;
+
 class Model3D
 {
 	private:
-		float pos_x;
+		//glm::vec3 position;
+		MyVector position;
+		glm::vec3 scale;
+		glm::vec3 axis;
+		glm::vec3 theta;
+		glm::vec4 color;
+		
+		/*float pos_x;
 		float pos_y;
 		float pos_z;
 		float scale_x;
@@ -26,22 +36,28 @@ class Model3D
 		float axis_z;
 		float theta_x;
 		float theta_y;
-		float theta_z;
+		float theta_z;*/
+	//	glm::vec4 color;
+
 
 	public:
 		Model3D();
+		Model3D(MyVector position, glm::vec3 scale, glm::vec4 color);
 
 	public:
 		std::vector<GLuint> loadModel(std::string objSrc, tinyobj::attrib_t* attributes);
 		void bindBuffers(tinyobj::attrib_t attributes, std::vector<GLuint> mesh_indices, GLuint* VAO, GLuint* VBO);
 		void drawModel(std::vector<GLuint> mesh_indices, GLuint shaderProg, GLuint* VAO);
 		void bindCamera(GLuint shaderProg, glm::mat4 projection, glm::mat4 viewMatrix);
-		void setPosition(float pos_x, float pos_y, float pos_z);
-		void setScale(float scale_x, float scale_y, float scale_z);
+
+	public:
+		void setPosition(MyVector position);
+		void setScale(glm::vec3 scale);
+		void setColor(glm::vec4 color);
 
 
 	//getters and setters
-	public:
+	/*public:
 		float getPos_X();
 		float getPos_Y();
 		float getPos_Z();
@@ -68,7 +84,7 @@ class Model3D
 		float getTheta_Z();
 		void setTheta_X(float theta_x);
 		void setTheta_Y(float theta_y);
-		void setTheta_Z(float theta_z);
+		void setTheta_Z(float theta_z);*/
 
 };
 
