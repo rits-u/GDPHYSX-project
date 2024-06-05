@@ -1,20 +1,5 @@
 #include "Model3D.h"
 
-//Model3D::Model3D() {
-//    this->pos_x = 0.0f;
-//    this->pos_y = 0.0f;
-//    this->pos_z = 0.0f;
-//    this->scale_x = 1.0f;
-//    this->scale_y = 1.0f;
-//    this->scale_z = 1.0f;
-//    this->axis_x = 0.0f;
-//    this->axis_y = 1.0f;
-//    this->axis_z = 0.0f;
-//    this->theta_x = 0.0f;
-//    this->theta_y = 0.0f;
-//    this->theta_z = 0.0f;
-//    this->color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-//}
 Model3D::Model3D() {
     this->position = P6::MyVector(0.0f, 0.0f, 0.0f);
     this->scale = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -118,7 +103,12 @@ void  Model3D::drawModel(std::vector<GLuint> mesh_indices, GLuint shaderProg, GL
     glDrawElements(GL_TRIANGLES, mesh_indices.size(), GL_UNSIGNED_INT, 0);
 }
 
-void  Model3D::bindCamera(GLuint shaderProg, glm::mat4 projection, glm::mat4 viewMatrix) {
+void Model3D::bindCamera(GLuint shaderProg, glm::mat4 projection) {
+    unsigned int projLoc = glGetUniformLocation(shaderProg, "projection");
+    glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+}
+
+void Model3D::bindCamera(GLuint shaderProg, glm::mat4 projection, glm::mat4 viewMatrix) {
     unsigned int projLoc = glGetUniformLocation(shaderProg, "projection");
     glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
@@ -138,106 +128,3 @@ void Model3D::setColor(glm::vec4 color) {
     this->color = color;
 }
 
-//GETTERS AND SETTERS
-//position
-//float Model3D::getPos_X() {
-//    return this->pos_x;
-//}
-//
-//float Model3D::getPos_Y() {
-//    return this->pos_y;
-//}
-//
-//float Model3D::getPos_Z() {
-//    return this->pos_z;
-//}
-//
-//void Model3D::setPos_X(float pos_x) {
-//    this->pos_x = pos_x;
-//}
-//
-//void Model3D::setPos_Y(float pos_y) {
-//    this->pos_y = pos_y;
-//}
-//
-//void Model3D::setPos_Z(float pos_z) {
-//    this->pos_z = pos_z;
-//}
-//
-////SCALE
-//float Model3D::getScale_X() {
-//    return this->scale_x;
-//}
-//
-//float Model3D::getScale_Y() {
-//    return this->scale_y;
-//}
-//
-//float Model3D::getScale_Z() {
-//    return this->scale_z;
-//}
-//
-//void Model3D::setScale_X(float scale_x)
-//{
-//    this->scale_x = scale_x;
-//}
-//
-//void Model3D::setScale_Y(float scale_y)
-//{
-//    this->scale_y = scale_y;
-//}
-//
-//void Model3D::setScale_Z(float scale_z)
-//{
-//    this->scale_z = scale_z;
-//}
-//
-////AXIS
-//float Model3D::getAxis_X() {
-//    return this->axis_x;
-//}
-//
-//float Model3D::getAxis_Y() {
-//    return this->axis_y;
-//}
-//
-//float Model3D::getAxis_Z() {
-//    return this->axis_z;
-//}
-//
-//void Model3D::setAxis_X(float axis_x) {
-//    this->axis_x = axis_x;
-//}
-//
-//void Model3D::setAxis_Y(float axis_y) {
-//    this->axis_y = axis_y;
-//}
-//
-//void Model3D::setAxis_Z(float axis_z) {
-//    this->axis_z = axis_z;
-//}
-//
-////THETA
-//float Model3D::getTheta_X() {
-//    return this->theta_x;
-//}
-//
-//float Model3D::getTheta_Y() {
-//    return this->theta_y;
-//}
-//
-//float Model3D::getTheta_Z() {
-//    return this->theta_z;
-//}
-//
-//void Model3D::setTheta_X(float theta_x) {
-//    this->theta_x = theta_x;
-//}
-//
-//void Model3D::setTheta_Y(float theta_y) {
-//    this->theta_y = theta_y;
-//}
-//
-//void Model3D::setTheta_Z(float theta_z) {
-//    this->theta_z = theta_z;
-//}

@@ -6,6 +6,8 @@ void PhysicsWorld::AddParticle(P6Particle* toAdd) {
 }
 
 void PhysicsWorld::Update(float time) {
+	UpdateParticleList();
+
 	for (std::list<P6Particle*>::iterator p = Particles.begin();
 
 		p != Particles.end();
@@ -14,6 +16,18 @@ void PhysicsWorld::Update(float time) {
 		)
 	{
 		(*p)->Update(time);
+	}
+}
+
+void PhysicsWorld::CheckIfDone() {
+	for (std::list<P6Particle*>::iterator p = Particles.begin();
+
+		p != Particles.end();
+
+		p++
+		)
+	{
+		(*p)->IsAtOrigin();
 	}
 }
 

@@ -3,7 +3,7 @@ using namespace P6;
 
 //MAGNITUDE
 float MyVector::getMagnitude() {
-	return sqrt(pow(this->x, 2) + pow(this->y, 2));
+	return sqrt(pow(this->x, 2) + pow(this->y, 2) + pow(this->z, 2));
 }
 
 //DIRECTION
@@ -41,9 +41,9 @@ void MyVector::operator-= (const MyVector v) {
 
 //SCALAR MULTIPLICATION
 MyVector MyVector::operator* (const float f) {
-	return MyVector(this->x - f,
-					this->y - f,
-					this->z - f);
+	return MyVector(this->x * f,
+					this->y * f,
+					this->z * f);
 }
 
 void MyVector::scalarMultiplication (const float f) {

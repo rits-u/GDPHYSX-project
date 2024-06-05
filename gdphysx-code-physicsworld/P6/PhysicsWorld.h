@@ -14,6 +14,8 @@ namespace P6 {
 		//Universal update function to call the updates of ALL
 		void Update(float time);
 
+		void CheckIfDone();
+
 	private:
 		//updates the particle list
 		void UpdateParticleList();

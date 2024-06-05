@@ -16,8 +16,8 @@ glm::mat4 OrthoCamera::giveView() {
 }
 
 glm::mat4 OrthoCamera::giveProjection() {
-	this->z_near = -100.0f;
-	this->z_far = 1.0f;
+	this->z_near = 2000.0f;
+	this->z_far = -2000.0f;
 	return glm::ortho(this->leftMost, this->rightMost, this->bottomMost, this->topMost, this->z_near, this->z_far);
 }
 
@@ -25,8 +25,9 @@ glm::mat4 OrthoCamera::giveProjection() {
 void OrthoCamera::setPosition(float leftmost, float rightMost, float bottomMost, float topmost) {
 	this->leftMost = leftmost;
 	this->rightMost = rightMost;
-	this->topMost = topmost;
 	this->bottomMost = bottomMost;
+	this->topMost = topmost;
+	
 }
 
 void OrthoCamera::setLeftMost(float leftMost) {
