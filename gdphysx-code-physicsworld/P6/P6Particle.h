@@ -11,8 +11,11 @@ namespace P6 {
 			MyVector Position;
 			MyVector Velocity;
 			MyVector Acceleration;
+			float damping = 0.9f;
 
 		protected:
+			MyVector accumulatedForce = MyVector(0, 0, 0);
+
 			bool isDestroyed = false;
 
 		protected:
@@ -25,6 +28,8 @@ namespace P6 {
 			void Destroy();
 			bool IsDestroyed();
 			bool IsAtOrigin();
+			void AddForce(MyVector force); //adds force to particle
+			void ResetForce();
 	};
 }
 

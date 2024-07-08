@@ -3,10 +3,13 @@ using namespace P6;
 
 void PhysicsWorld::AddParticle(P6Particle* toAdd) {
 	Particles.push_back(toAdd);	
+	forceRegistry.Add(toAdd, &Gravity); //HELP 
 }
 
 void PhysicsWorld::Update(float time) {
 	UpdateParticleList();
+
+	forceRegistry.UpdateForces(time);
 
 	for (std::list<P6Particle*>::iterator p = Particles.begin();
 

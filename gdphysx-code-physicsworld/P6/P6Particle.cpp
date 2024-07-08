@@ -8,12 +8,21 @@ void P6Particle::UpdatePosition(float time) {
 
 
 void P6Particle::UpdateVelocity(float time) {
+	//A                 =        F         /    m
+	this->Acceleration += accumulatedForce * (1/mass);
+
+	//Vf           =        V1      +         A
 	this->Velocity = this->Velocity + (this->Acceleration * time);
+
+	//Vfd          =         Vf     *       d ^ t
+	this->Velocity = this->Velocity * powf(damping, time);
 }
 
 void P6Particle::Update(float time) {
 	this->UpdatePosition(time);
 	this->UpdateVelocity(time);
+
+	this->ResetForce();
 }
 
 void P6Particle::Destroy() {
@@ -32,4 +41,13 @@ bool P6Particle::IsAtOrigin() {
 			return true;
 	}
 	return false;
+}
+
+void P6Particle::AddForce(MyVector force) {
+	accumulatedForce += force;
+}
+
+void P6Particle::ResetForce() {
+	this->accumulatedForce = MyVector(0, 0, 0);
+	this->Acceleration = MyVector(0, 0, 0);
 }

@@ -16,6 +16,7 @@ namespace P6 {
 			explicit operator glm::vec3() const { return glm::vec3(x, y, z); }  //for typecast
 
 			float getMagnitude();
+			MyVector normalize();
 			MyVector getDirection();
 			MyVector operator+ (const MyVector v);
 			void operator+= (const MyVector v);

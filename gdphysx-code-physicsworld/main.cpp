@@ -78,27 +78,34 @@ int main(void)
 
     P6::P6Particle p1 = P6::P6Particle();
     p1.Position = P6::MyVector(-700, 700, 201);
-    p1.Velocity = P6::MyVector(80, -80, -80);
-    p1.Acceleration = P6::MyVector(14.5, -14.5, -14.5);
+ //   p1.Velocity = P6::MyVector(80, -80, -80);   
+  //  p1.Acceleration = P6::MyVector(14.5, -14.5, -14.5);
+   // p1.damping = 1.0f;
+    p1.mass = 0.5; // 1KG
+    p1.AddForce(P6::MyVector(6000, 0, 0));  //around 6000,0,0 kg m/s^2
     pWorld.AddParticle(&p1);
 
     P6::P6Particle p2 = P6::P6Particle();
     p2.Position = P6::MyVector(700, 700, 173);
     p2.Velocity = P6::MyVector(-90, -90, -130);
     p2.Acceleration = P6::MyVector(-8, -8, -8);
+    p2.damping = 1.0f;
     pWorld.AddParticle(&p2);
 
     P6::P6Particle p3 = P6::P6Particle();
     p3.Position = P6::MyVector(700, -700, -300);
     p3.Velocity = P6::MyVector(-130, 130, 130);  
     p3.Acceleration = P6::MyVector(-1, 1, 1);
+    p3.damping = 1.0f;
     pWorld.AddParticle(&p3);
 
     P6::P6Particle p4 = P6::P6Particle();
     p4.Position = P6::MyVector(-700, -700, -150);
     p4.Velocity = P6::MyVector(110, 110, 110);
     p4.Acceleration = P6::MyVector(3, 3, 3);
+    p4.damping = 1.0f;
     pWorld.AddParticle(&p4);
+
 
 
     Model3D* sphere1 = new Model3D(p1.Position,
@@ -172,7 +179,7 @@ int main(void)
 
 
         }
-  
+    
         
        if (p1.IsAtOrigin() && !p1.IsDestroyed()) {
             p1.Destroy();

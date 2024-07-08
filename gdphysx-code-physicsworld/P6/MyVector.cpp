@@ -6,6 +6,13 @@ float MyVector::getMagnitude() {
 	return sqrt(pow(this->x, 2) + pow(this->y, 2) + pow(this->z, 2));
 }
 
+MyVector MyVector::normalize() {
+	float mag = this->getMagnitude();
+	return MyVector(this->x / mag,
+					this->y / mag,
+					this->z / mag);
+}
+
 //DIRECTION
 MyVector MyVector::getDirection() {
 	float d = 1/this->getMagnitude();
