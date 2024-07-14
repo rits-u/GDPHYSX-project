@@ -22,7 +22,7 @@ void PhysicsWorld::Update(float time) {
 		(*p)->Update(time);
 	}
 
-	GenerateContacts();
+	//GenerateContacts();
 
 	if (Contacts.size() > 0) {
 		contactResolver.ResolveContacts(Contacts, time);
@@ -47,6 +47,7 @@ void PhysicsWorld::AddContact(P6Particle* p1, P6Particle* p2, float restitution,
 	toAdd->particles[1] = p2;
 	toAdd->restitution = restitution;
 	toAdd->contactNormal = contactNormal;
+	toAdd->depth = 50;
 
 	Contacts.push_back(toAdd);
 }

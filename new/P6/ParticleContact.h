@@ -1,5 +1,6 @@
 #pragma once
 #include "P6Particle.h"
+#include "iostream"
 
 namespace P6 {
 	class ParticleContact

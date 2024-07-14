@@ -19,6 +19,7 @@
 #include "P6/ParticleContact.h"
 
 #include "Utility.h"
+#include "RenderLine.h"
 
 //openGL
 #include <glad/glad.h>
@@ -46,6 +47,7 @@ bool bPaused = false;
 
 PerspectiveCamera* persCamera = new PerspectiveCamera();
 OrthoCamera* orthoCamera = new OrthoCamera(-SCREEN_WIDTH, SCREEN_WIDTH, SCREEN_HEIGHT, -SCREEN_HEIGHT);
+//  OrthoCamera* orthoCamera = new OrthoCamera(-SCREEN_WIDTH, SCREEN_WIDTH, -SCREEN_HEIGHT, SCREEN_HEIGHT);
 
 std::string cameraType = "Ortho";
 
@@ -224,12 +226,13 @@ int main(void)
 
     //1ST PARTICLE
     P6Particle p1 = P6Particle();
-    p1.Position = MyVector(150, 0, 0);
+    p1.Position = MyVector(100, 0, 0);
     p1.mass = 5;
     pWorld.AddParticle(&p1);
 
-    glm::vec3 rngColor = utility.getRandomVector(lowerBoundCol, upperBoundCol);
-    glm::vec4 colorVec = glm::vec4(rngColor.x / 254.0f, rngColor.y / 254.0f, rngColor.z / 254.0f, 1.0f);
+   // glm::vec3 rngColor = utility.getRandomVector(lowerBoundCol, upperBoundCol);
+    //glm::vec4 colorVec = glm::vec4(rngColor.x / 254.0f, rngColor.y / 254.0f, rngColor.z / 254.0f, 1.0f);
+    glm::vec4 colorVec = glm::vec4(0 / 254.0f, 255 / 254.0f, 240 / 254.0f, 1.0f);  //cyan
 
     Model3D* m1 = new Model3D(glm::vec3(50, 50, 50), colorVec, shaderProg);
     m1->loadModel("3D/sphere.obj", &VBO);
@@ -245,8 +248,9 @@ int main(void)
     p2.mass = 5;
     pWorld.AddParticle(&p2);
 
-    rngColor = utility.getRandomVector(lowerBoundCol, upperBoundCol);
-    colorVec = glm::vec4(rngColor.x / 254.0f, rngColor.y / 254.0f, rngColor.z / 254.0f, 1.0f);
+    //rngColor = utility.getRandomVector(lowerBoundCol, upperBoundCol);
+    //colorVec = glm::vec4(rngColor.x / 254.0f, rngColor.y / 254.0f, rngColor.z / 254.0f, 1.0f);
+    colorVec = glm::vec4(254 / 254.0f, 0 / 254.0f, 0 / 254.0f, 1.0f);  //red
 
     Model3D* m2 = new Model3D(glm::vec3(50, 50, 50), colorVec, shaderProg);
     m2->loadModel("3D/sphere.obj", &VBO);
@@ -256,9 +260,17 @@ int main(void)
     RenderParticle* rp2 = new RenderParticle(&p2, m2);
     RenderParticles.push_back(rp2);
 
-    p1.Velocity = MyVector(-60, 0, 0);
-    p2.Velocity = MyVector(30, 0, 0);
 
+    MyVector dir = p1.Position - p2.Position;
+    dir.normalize();
+
+    pWorld.AddContact(&p1, &p2, 1, dir);
+
+    p1.Velocity = MyVector(-60, 0, 0);
+    p2.Velocity = MyVector(15, 0, 0);
+    
+
+    RenderLine line = RenderLine(p1.Position, p2.Position, MyVector(1, 1, 1));
 
     //CONTACT
     /*ParticleContact contact = ParticleContact();
@@ -267,12 +279,10 @@ int main(void)
 
     contact.contactNormal = p1.Position - p2.Position;
     contact.contactNormal = contact.contactNormal.normalize();
-    contact.restitution = 0;*/
-
-    MyVector dir = p1.Position - p2.Position;
-    dir.normalize();
-
-    pWorld.AddContact(&p1, &p2, 1, dir);
+    contact.restitution = 1;*/
+   // p1.Velocity = MyVector(-60, 0, 0);
+    //p2.Velocity = MyVector(15, 0, 0);
+   
 
         
     /* Loop until the user closes the window */
@@ -371,11 +381,15 @@ int main(void)
 
             (*i)->draw();
         }
+
+        line.Update(p1.Position, p2.Position, orthoCamera->giveProjection());
+        line.Draw();
        
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
+   
 
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);

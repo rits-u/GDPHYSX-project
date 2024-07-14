@@ -10,7 +10,7 @@ void ParticleContact::ResolveInterpenetration(float time) {
 	if (particles[1])
 		totalMass += (float)1 / particles[1]->mass;
 
-	if (totalMass <= 0)
+	if (totalMass <= 0) // invalid collision if total mass is 0 or less
 		return;
 
 	//check how much we move the particles
@@ -30,7 +30,7 @@ void ParticleContact::ResolveInterpenetration(float time) {
 		particles[1]->Position += P_b;
 	}
 
-	depth = 0;
+	depth = 0; //after solving, assume its depth now 0
 }
 
 float ParticleContact::GetSeparatingSpeed() {
@@ -62,15 +62,15 @@ void ParticleContact::ResolveVelocity(float time) {
 	if (particles[1])
 		totalMass += (float)1 / particles[1]->mass;
 
-	if (totalMass <= 0)
+	if (totalMass <= 0) 
 		return;
 
 	float impulse_mag = deltaSpeed / totalMass;
 	MyVector Impulse = contactNormal * impulse_mag;
 
 	MyVector V_a = Impulse * ((float)1 / particles[0]->mass);
-	MyVector velocity = particles[0]->Velocity + V_a;
-	particles[0]->Velocity = velocity;
+	//MyVector velocity = 
+	particles[0]->Velocity = particles[0]->Velocity + V_a;
 
 	if (particles[1]) {
 		MyVector V_b = Impulse * ((float)-1 / particles[1]->mass);
@@ -84,6 +84,7 @@ void ParticleContact::Resolve(float time) {
 
 	//solve for the pos after collision
 	ResolveInterpenetration(time);
+//	std::cout << "aaa" << std::endl;
 
 	//the two functions are interchangeable	
 }

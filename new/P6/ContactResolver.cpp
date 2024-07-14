@@ -9,8 +9,26 @@ void ContactResolver::ResolveContacts(std::vector<ParticleContact*> contacts, fl
 		float curr_min = contacts[0]->GetSeparatingSpeed();
 		float max_depth = contacts[0]->depth;
 		
-		//for(int i = 1; 1 < )
+		for (int i = 1; 1 < contacts.size(); i++) {
+			float ss = contacts[i]->GetSeparatingSpeed();
 
-		//finish this
+			if (ss < curr_min && (ss < 0 || 0 < contacts[i]->depth)) {
+				current_index = i;
+				curr_min = ss;
+
+				if (max_depth < contacts[i]->depth) {
+					max_depth = contacts[i]->depth;
+				}
+			}
+		}
+
+		if (curr_min >= 0 && max_depth <= 0) {
+			return;
+		}
+
+		contacts[current_index]->Resolve(time);
+		current_iterations++;
+
+		//finish this		
 	}
 }

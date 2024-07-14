@@ -161,6 +161,7 @@
     <ClCompile Include="P6\Springs\ParticleSpring.cpp" />
     <ClCompile Include="P6\Links\ParticleLink.cpp" />
     <ClCompile Include="P6\Links\Rod.cpp" />
+    <ClCompile Include="RenderLine.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -200,6 +201,7 @@
     <ClInclude Include="P6\Springs\ParticleSpring.h" />
     <ClInclude Include="P6\Links\ParticleLink.h" />
     <ClInclude Include="P6\Links\Rod.h" />
+    <ClInclude Include="RenderLine.h" />
     <ClInclude Include="tiny_obj_loader.h" />
     <ClInclude Include="Utility.h" />
   </ItemGroup>
