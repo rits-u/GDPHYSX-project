@@ -12,10 +12,12 @@ namespace P6 {
 			MyVector contactNormal;
 
 			void Resolve(float time);
+			
+			float GetSeparatingSpeed();
 
 		protected:
+			
 			void ResolveInterpenetration(float time);
-			float GetSeparatingSpeed();
 			void ResolveVelocity(float time);
 	};
 

@@ -7,6 +7,7 @@
 #include "GravityForceGenerator.h"
 #include "ParticleContact.h"
 #include "ContactResolver.h"
+#include "Links/ParticleLink.h"
 
 #include "iostream"
 
@@ -20,11 +21,13 @@ namespace P6 {
 
 	protected:
 		ContactResolver contactResolver = ContactResolver(20);
+		
 			
 	public:
 		ForceRegistry forceRegistry;
 		std::list<P6Particle*> Particles;
-		std::vector<ParticleContact*> contacts;
+		std::vector<ParticleContact*> Contacts;
+		std::list<ParticleLink*> Links;
 
 	//METHODS
 	public:
@@ -35,5 +38,8 @@ namespace P6 {
 
 	private:
 		void UpdateParticleList();
+
+	protected:
+		void GenerateContacts();
 	};
 }

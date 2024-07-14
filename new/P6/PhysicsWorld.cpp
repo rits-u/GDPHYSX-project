@@ -22,8 +22,10 @@ void PhysicsWorld::Update(float time) {
 		(*p)->Update(time);
 	}
 
-	if (contacts.size() > 0) {
-		contactResolver.ResolveContacts(contacts, time);
+	GenerateContacts();
+
+	if (Contacts.size() > 0) {
+		contactResolver.ResolveContacts(Contacts, time);
 	}
 }
 
@@ -46,9 +48,26 @@ void PhysicsWorld::AddContact(P6Particle* p1, P6Particle* p2, float restitution,
 	toAdd->restitution = restitution;
 	toAdd->contactNormal = contactNormal;
 
-	contacts.push_back(toAdd);
+	Contacts.push_back(toAdd);
 }
 
+void PhysicsWorld::GenerateContacts() {
+	Contacts.clear();
+
+	for (std::list<ParticleLink*>::iterator i = Links.begin();
+		i != Links.end();
+		i++) {
+
+		ParticleContact* contact = (*i)->GetContact();
+		if (contact != nullptr) {
+			Contacts.push_back(contact);
+		}
+
+	}
+}
+
+
+ 
 //this function removes destroyed particles from the list
 void PhysicsWorld::UpdateParticleList() {
 	Particles.remove_if(

@@ -5,9 +5,32 @@ void ParticleContact::ResolveInterpenetration(float time) {
 	if (depth <= 0)
 		return;
 
+	//get the total mass of the collision
 	float totalMass = (float)1 / particles[0]->mass;
 	if (particles[1])
 		totalMass += (float)1 / particles[1]->mass;
+
+	if (totalMass <= 0)
+		return;
+
+	//check how much we move the particles
+	//the higher the mass, the less the particle will move
+	float totalMoveByMass = depth / totalMass;
+
+	//the move position
+	MyVector moveByMass = contactNormal * totalMoveByMass;
+	
+	//get the change in position for A
+	MyVector P_a = moveByMass * ((float)1 / particles[0]->mass);
+	particles[0]->Position += P_a; //translate
+
+	if (particles[1]) {
+		//get the change in position for B in the opposite direction (that's why it needs to be multiplied by -1)
+		MyVector P_b = moveByMass * (-(float)1 / particles[1]->mass);
+		particles[1]->Position += P_b;
+	}
+
+	depth = 0;
 }
 
 float ParticleContact::GetSeparatingSpeed() {
@@ -56,5 +79,11 @@ void ParticleContact::ResolveVelocity(float time) {
 }
 
 void ParticleContact::Resolve(float time) {
+	//solve for the the V after collision
 	ResolveVelocity(time);
+
+	//solve for the pos after collision
+	ResolveInterpenetration(time);
+
+	//the two functions are interchangeable	
 }
