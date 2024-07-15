@@ -16,6 +16,8 @@ namespace P6 {
 			float damping = 0.9f;
 			float lifespan = 10.0f;
 			float spawnTime;
+			float radius = 1.0f; //a radius of 1 meter or size of the particle
+			float restitution = 1.0f;
 
 		protected:
 			MyVector accumulatedForce = MyVector(0, 0, 0);

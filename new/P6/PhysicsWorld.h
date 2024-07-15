@@ -16,8 +16,8 @@ namespace P6 {
 	
 	//FIELDS
 	private:
-		//GravityForceGenerator Gravity = GravityForceGenerator(MyVector(0, -9.8, 0));
-		GravityForceGenerator Gravity = GravityForceGenerator(MyVector(0, 0, 0));
+		GravityForceGenerator Gravity = GravityForceGenerator(MyVector(0, -9.8, 0));
+		//GravityForceGenerator Gravity = GravityForceGenerator(MyVector(0, 0, 0));
 
 	protected:
 		ContactResolver contactResolver = ContactResolver(20);
@@ -34,12 +34,13 @@ namespace P6 {
 		void AddParticle(P6Particle* toAdd);
 		void Update(float time);
 		void CheckLifespan(float time);
-		void AddContact(P6Particle* p1, P6Particle* p2, float restitution, MyVector contactNormal);
+		void AddContact(P6Particle* p1, P6Particle* p2, float restitution, MyVector contactNormal, float depth);
 
 	private:
 		void UpdateParticleList();
 
 	protected:
 		void GenerateContacts();
+		void GetOverlaps(); //get the contacts that overlap
 	};
 }

@@ -18,6 +18,11 @@
 #include "P6/RenderParticle.h"
 #include "P6/ParticleContact.h"
 
+#include "P6/Springs/AnchoredSpring.h"
+#include "P6/Springs/ParticleSpring.h"
+
+#include "P6/Links//Rod.h"
+
 #include "Utility.h"
 #include "RenderLine.h"
 
@@ -46,7 +51,7 @@ int SCREEN_HEIGHT = 800;
 bool bPaused = false;
 
 PerspectiveCamera* persCamera = new PerspectiveCamera();
-OrthoCamera* orthoCamera = new OrthoCamera(-SCREEN_WIDTH, SCREEN_WIDTH, SCREEN_HEIGHT, -SCREEN_HEIGHT);
+OrthoCamera* orthoCamera = new OrthoCamera(-SCREEN_WIDTH/2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, -SCREEN_HEIGHT/2);
 //  OrthoCamera* orthoCamera = new OrthoCamera(-SCREEN_WIDTH, SCREEN_WIDTH, -SCREEN_HEIGHT, SCREEN_HEIGHT);
 
 std::string cameraType = "Ortho";
@@ -226,51 +231,58 @@ int main(void)
 
     //1ST PARTICLE
     P6Particle p1 = P6Particle();
-    p1.Position = MyVector(100, 0, 0);
-    p1.mass = 5;
+    p1.Position = MyVector(0, 0, 0);
+    p1.mass = 50;
+    p1.radius = 50;
     pWorld.AddParticle(&p1);
+
+    p1.AddForce(MyVector(0.0f, 0.1f, 0.0f) * 500000);
 
    // glm::vec3 rngColor = utility.getRandomVector(lowerBoundCol, upperBoundCol);
     //glm::vec4 colorVec = glm::vec4(rngColor.x / 254.0f, rngColor.y / 254.0f, rngColor.z / 254.0f, 1.0f);
     glm::vec4 colorVec = glm::vec4(0 / 254.0f, 255 / 254.0f, 240 / 254.0f, 1.0f);  //cyan
 
-    Model3D* m1 = new Model3D(glm::vec3(50, 50, 50), colorVec, shaderProg);
+    Model3D* m1 = new Model3D(glm::vec3(p1.radius, p1.radius, p1.radius), colorVec, shaderProg);
     m1->loadModel("3D/sphere.obj", &VBO);
     m1->setCameraProperties(projection, viewMatrix);
     modelManager.AddModel(m1);
 
     RenderParticle* rp1 = new RenderParticle(&p1, m1);
+    rp1->Scale = MyVector(p1.radius, p1.radius, p1.radius);
     RenderParticles.push_back(rp1);
 
     //2ND PARTICLE
     P6Particle p2 = P6Particle();
-    p2.Position = MyVector(50, 0, 0);
-    p2.mass = 5;
+    p2.Position = MyVector(150, 0, 0);
+    p2.mass = 100;
+    p2.radius = 50;
     pWorld.AddParticle(&p2);
 
     //rngColor = utility.getRandomVector(lowerBoundCol, upperBoundCol);
     //colorVec = glm::vec4(rngColor.x / 254.0f, rngColor.y / 254.0f, rngColor.z / 254.0f, 1.0f);
     colorVec = glm::vec4(254 / 254.0f, 0 / 254.0f, 0 / 254.0f, 1.0f);  //red
 
-    Model3D* m2 = new Model3D(glm::vec3(50, 50, 50), colorVec, shaderProg);
+    Model3D* m2 = new Model3D(glm::vec3(p2.radius, p2.radius, p2.radius), colorVec, shaderProg);
     m2->loadModel("3D/sphere.obj", &VBO);
     m2->setCameraProperties(projection, viewMatrix);
     modelManager.AddModel(m2);
 
+
     RenderParticle* rp2 = new RenderParticle(&p2, m2);
+    rp2->Scale = MyVector(p2.radius, p2.radius, p2.radius);
     RenderParticles.push_back(rp2);
 
 
-    MyVector dir = p1.Position - p2.Position;
-    dir.normalize();
+    //MyVector dir = p1.Position - p2.Position;
+   // dir.normalize();
 
-    pWorld.AddContact(&p1, &p2, 1, dir);
+    //pWorld.AddContact(&p1, &p2, 1, dir);
 
-    p1.Velocity = MyVector(-60, 0, 0);
-    p2.Velocity = MyVector(15, 0, 0);
+   // p1.Velocity = MyVector(-60, 0, 0);
+    //p2.Velocity = MyVector(15, 0, 0);
     
 
-    RenderLine line = RenderLine(p1.Position, p2.Position, MyVector(1, 1, 1));
+    //RenderLine line = RenderLine(p1.Position, p2.Position, MyVector(1, 1, 1));
 
     //CONTACT
     /*ParticleContact contact = ParticleContact();
@@ -283,7 +295,34 @@ int main(void)
    // p1.Velocity = MyVector(-60, 0, 0);
     //p2.Velocity = MyVector(15, 0, 0);
    
+   
 
+    //SPRING
+  /*  MyVector springPos = MyVector(0, 1, 0);  //if position of the particle is equal to the anchored spring, there will be error
+    AnchoredSpring aSpring = AnchoredSpring(springPos, 5, 0.5f);
+    pWorld.forceRegistry.Add(&p1, &aSpring);
+
+    RenderLine line = RenderLine(p1.Position, springPos, MyVector(1, 1, 1));*/
+
+    //single direction
+    //ParticleSpring pS = ParticleSpring(&p1, 5, 1);  //attach the first end to p1
+    //pWorld.forceRegistry.Add(&p2, &pS);   //register with the other end by p2 to force registry
+
+    //but realistically, it should go both ways
+    //ParticleSpring pS2 = ParticleSpring(&p2, 5, 1); 
+    //pWorld.forceRegistry.Add(&p1, &pS2);  
+
+    
+
+    //ROD
+    Rod* r = new Rod();
+    r->particles[0] = &p1;
+    r->particles[1] = &p2;
+    r->length = 200;
+
+    pWorld.Links.push_back(r);
+
+    RenderLine line = RenderLine(p1.Position, p2.Position, MyVector(1, 1, 1)); 
         
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -382,6 +421,7 @@ int main(void)
             (*i)->draw();
         }
 
+      //  line.Update(p1.Position, p2.Position, orthoCamera->giveProjection());
         line.Update(p1.Position, p2.Position, orthoCamera->giveProjection());
         line.Draw();
        

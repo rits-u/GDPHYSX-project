@@ -12,6 +12,7 @@ namespace P6 {
 		public:
 			P6Particle* physicsParticle;
 			Model3D* renderObject;
+			MyVector Scale;
 		
 		//CONSTRUCTOR
 		public:

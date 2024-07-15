@@ -39,8 +39,8 @@ float ParticleContact::GetSeparatingSpeed() {
 		velocity -= particles[1]->Velocity;
 		
 		//N
-		MyVector position = particles[0]->Position - particles[1]->Position;
-		contactNormal = position.getDirection();
+		//MyVector position = particles[0]->Position - particles[1]->Position;
+		//contactNormal = position.getDirection();
 	}
 
 	return velocity.scalarProduct(contactNormal);
