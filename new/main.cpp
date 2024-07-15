@@ -233,7 +233,7 @@ int main(void)
     P6Particle p1 = P6Particle();
     p1.Position = MyVector(0, 0, 0);
     p1.mass = 50;
-    p1.radius = 50;
+    p1.radius = 20;
     pWorld.AddParticle(&p1);
 
     p1.AddForce(MyVector(0.0f, 0.1f, 0.0f) * 500000);
@@ -253,9 +253,9 @@ int main(void)
 
     //2ND PARTICLE
     P6Particle p2 = P6Particle();
-    p2.Position = MyVector(150, 0, 0);
+    p2.Position = MyVector(50, 0, 0);
     p2.mass = 100;
-    p2.radius = 50;
+    p2.radius = 20;
     pWorld.AddParticle(&p2);
 
     //rngColor = utility.getRandomVector(lowerBoundCol, upperBoundCol);
@@ -312,7 +312,6 @@ int main(void)
     //ParticleSpring pS2 = ParticleSpring(&p2, 5, 1); 
     //pWorld.forceRegistry.Add(&p1, &pS2);  
 
-    
 
     //ROD
     Rod* r = new Rod();

@@ -29,6 +29,6 @@ void ContactResolver::ResolveContacts(std::vector<ParticleContact*> contacts, fl
 		contacts[current_index]->Resolve(time);
 		current_iterations++;
 
-		//finish this		
+		//owo		
 	}
 }
